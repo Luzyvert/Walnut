@@ -30,6 +30,10 @@ project "WalnutApp"
       systemversion "latest"
       defines { "WL_PLATFORM_WINDOWS" }
 
+   filter "system:mac"
+      systemversion "latest"
+      defines { "WL_PLATFORM_MACOS" }
+
    filter "configurations:Debug"
       defines { "WL_DEBUG" }
       runtime "Debug"

@@ -10,11 +10,12 @@
 #include <stdlib.h>         // abort
 #define GLFW_INCLUDE_NONE
 #define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 #include <vulkan/vulkan.h>
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 
 #include <iostream>
+#include <stdlib.h>
 
 // Emedded font
 #include "ImGui/Roboto-Regular.embed"
@@ -85,6 +86,9 @@ static void SetupVulkan(const char** extensions, uint32_t extensions_count)
 		create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		create_info.enabledExtensionCount = extensions_count;
 		create_info.ppEnabledExtensionNames = extensions;
+#ifdef WL_PLATFORM_MAC
+        create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+#endif
 #ifdef IMGUI_VULKAN_DEBUG_REPORT
 		// Enabling validation layers
 		const char* layers[] = { "VK_LAYER_KHRONOS_validation" };
@@ -423,8 +427,14 @@ namespace Walnut {
 			std::cerr << "GLFW: Vulkan not supported!\n";
 			return;
 		}
-		uint32_t extensions_count = 0;
+		uint32_t extensions_count = 3;
+#ifdef WL_PLATFORM_MAC
+        const char* newExt[] = {VK_KHR_SURFACE_EXTENSION_NAME, "VK_EXT_metal_surface", "VK_KHR_portability_enumeration", NULL};
+        const char** extensions = newExt;
+#else
 		const char** extensions = glfwGetRequiredInstanceExtensions(&extensions_count);
+#endif
+        
 		SetupVulkan(extensions, extensions_count);
 
 		// Create Window Surface

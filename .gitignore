@@ -9,5 +9,16 @@ bin-int/
 *.vcxproj.filters
 *.sln
 
+# Mac OS files
+*.DS_Store
+*.plist
+*.xcscheme
+*.xcsettings
+*.pbxproj
+*.xcuserstate
+*.xcworkspacedata
+*.xcbkptlist
+
 # Exclude
 !vendor/bin
+*.vscode/
